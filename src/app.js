@@ -9,7 +9,7 @@ const users = []
 
 const tweets = []
 
-app.post('/signup', (req, res) => {
+app.post('/sign-up', (req, res) => {
     const {username, avatar} = req.body
     users.push({username, avatar})
     res.send("OK")
