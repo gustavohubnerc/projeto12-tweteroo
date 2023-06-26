@@ -12,18 +12,18 @@ const tweets = []
 app.post('/sign-up', (req, res) => {
     const {username, avatar} = req.body
     users.push({username, avatar})
-    res.send("OK")
+    res.status(201).send("OK")
 })
 
 app.post('/tweets', (req, res) => {
     const { username, tweet } = req.body
     const checkUser = users.find((user) => user.username === username)
     if (!checkUser){
-        res.send("UNAUTHORIZED")
+        res.status(401).send("UNAUTHORIZED")
     }
     const newPost = { username, tweet }
     tweets.push(newPost)
-    res.send("OK")
+    res.status(201).send("OK")
 })
 
 app.get('/tweets', (req, res) => {
