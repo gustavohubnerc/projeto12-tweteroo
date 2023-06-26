@@ -10,30 +10,33 @@ const users = []
 const tweets = []
 
 app.post('/signup', (req, res) => {
-    const user = req.body
-    users.push(user)
+    const {username, avatar} = req.body
+    users.push({username, avatar})
     res.send("OK")
 })
 
 app.post('/tweets', (req, res) => {
     const { username, tweet } = req.body
-    const { avatar } = users.find(user => user.username === username)
-    const newPost = {
-        username: username,
-        avatar: avatar,
-        tweet: tweet
+    const checkUser = users.find((user) => user.username === username)
+    if (!checkUser){
+        res.send("UNAUTHORIZED")
     }
+    const newPost = { username, tweet }
     tweets.push(newPost)
     res.send("OK")
 })
 
 app.get('/tweets', (req, res) => {
-    if (tweets.length > 10){
-        const latestTweets = tweets.slice(-10)
-        res.send(latestTweets)
-        return
-    }
-    res.send(tweets)
+    const latestTweets = tweets.slice(-10)
+    const showTweets = latestTweets.map((tweet) => {
+        const showUser = users.find((user) => user.username === tweet.username)
+        return {
+            username: tweet.username,
+            avatar: showUser.avatar,
+            tweet: tweet.tweet
+        }
+    })
+    res.send(showTweets)
 })
 
 const PORT = 5000
